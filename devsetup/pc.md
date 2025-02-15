@@ -128,10 +128,37 @@ dnf upgrade --refresh -y >> /etc/update-cron.log
 echo "Removing unused packages..." >> /etc/update-cron.log
 dnf autoremove -y >> /etc/update-cron.log
 
-# Reboot the system
-echo "Rebooting the system..." >> /etc/update-cron.log
-reboot >> /etc/update-cron.log
+# Check if a reboot is needed
+if dnf needs-restarting -r; then
+    echo "Rebooting the system..." >> /etc/update-cron.log
+    reboot >> /etc/update-cron.log
+else
+    echo "No reboot required." >> /etc/update-cron.log
+fi
 ```
+sudo chmod +x /usr/local/bin/update-script.sh
+sudo vi /etc/systemd/system/update-script.service
+```
+[Unit]
+Description=Run update script
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/update-script.sh
+```
+sudo vi /etc/systemd/system/update-script.timer
+```
+[Unit]
+Description=Run update script daily at midnight
+
+[Timer]
+OnCalendar=*-*-* 00:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+sudo systemctl enable update-script.timer
 
 ## dnf changes:
 needs restarting is part of dnf5
@@ -142,14 +169,11 @@ modify etc/dnf/automatic.conf --installupdates --timer and so on.
 systemctl enable --now dnf5-automatic.timer
 
 # add keyboard shortcut for super+menu and ctrl+alt+t (needs-restarting is part of yum-utils)
-sh -c "needs restarting -r && systemctl suspend || (notify-send -u critical -t 0 'shutdown in 5 minutes...' 'to cancel run shutdown -c' && shutdown +5)" 
+sh -c "dnf needs-restarting -r && systemctl suspend || (notify-send -u critical -t 0 'shutdown in 5 minutes...' 'to cancel run shutdown -c' && shutdown +5)" 
 
 # fyi how to check installed packages
 dnf rq --deplist nautilus
 dnf info gnome-system-monitor
-
-# add keyboard shortcut for super+menu and ctrl+alt+t (needs-restarting is part of yum-utils)
-sh -c "needs restarting -r && systemctl suspend || (notify-send -u critical -t 0 'shutdown in 5 minutes...' 'to cancel run shutdown -c' && shutdown +5)" 
 
 -->
 
