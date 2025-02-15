@@ -53,13 +53,36 @@ Also install optional dependencies, so without `--setopt=install_weak_deps=False
 sudo dnf install @virtualization virt-manager
 ```
 
+
+
 ## Enable services
 
-Boot into desktop, start virtual machine manger & cronjobs
+Boot into desktop, start virtual machine manger, start cron, start auto-updates
 ```
 sudo systemctl set-default graphical.target
 sudo systemctl enable libvirtd 
-sudo systemctl enable crond 
+sudo systemctl enable crond
+sudo systemctl enable dnf5-automatic.timer
+```
+
+## Auto-updates
+
+### Option1: dn5 automatic (WIP)
+
+> Work in progress, run `man dnf5-automatic` to replace echo instead & test if config works.
+
+```
+sudo dnf5 install dnf5-plugin-automatic
+echo '
+[commands]
+apply_updates = yes
+' | sudo tee -a /etc/dnf/automatic.conf
+sudo systemctl enable dnf5-automatic.timer
+```
+
+### Option2: cron
+```
+TBD - 
 ```
 
 ## Update & Reboot
@@ -80,6 +103,10 @@ dnf list --installed | wc -l
 #############################################
 ## TBD
 #############################################
+
+enable  automatic updates
+sudo sed -i 's/^apply_updates = .*/apply_updates = yes/' /etc/dnf/automatic.conf
+sudo sed -i 's/^reboot = .*/reboot = when-needed/' /etc/dnf/automatic.conf
    
 ###install vm(s) & start vm(s) on machine startup
 ####sudo virsh autostart debian12
@@ -87,6 +114,24 @@ dnf list --installed | wc -l
 ####create frequent auto-update script 
 #### dnf [update stuff and clean stuff] && (dnf needs-restarting && (send email that restart happened) && restart)
 ####crontab -e
+```
+#!/bin/bash
+
+# Log current time
+date +"%Y-%m-%d %H:%M:%S" > /etc/update-cron.log
+
+# Update the system
+echo "Updating the system..." >> /etc/update-cron.log
+dnf upgrade --refresh -y >> /etc/update-cron.log
+
+# Remove unused packages
+echo "Removing unused packages..." >> /etc/update-cron.log
+dnf autoremove -y >> /etc/update-cron.log
+
+# Reboot the system
+echo "Rebooting the system..." >> /etc/update-cron.log
+reboot >> /etc/update-cron.log
+```
 
 ## dnf changes:
 needs restarting is part of dnf5
@@ -102,5 +147,9 @@ sh -c "needs restarting -r && systemctl suspend || (notify-send -u critical -t 0
 # fyi how to check installed packages
 dnf rq --deplist nautilus
 dnf info gnome-system-monitor
+
+# add keyboard shortcut for super+menu and ctrl+alt+t (needs-restarting is part of yum-utils)
+sh -c "needs restarting -r && systemctl suspend || (notify-send -u critical -t 0 'shutdown in 5 minutes...' 'to cancel run shutdown -c' && shutdown +5)" 
+
 -->
 
