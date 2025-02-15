@@ -95,5 +95,12 @@ https://dnf5.readthedocs.io/en/latest/dnf5_plugins/automatic.8.html#automatic-pl
 edit and enable it as per  https://dnf5.readthedocs.io/en/latest/dnf5_plugins/automatic.8.html#run-dnf5-automatic-service
 modify etc/dnf/automatic.conf --installupdates --timer and so on.
 systemctl enable --now dnf5-automatic.timer
+
+# add keyboard shortcut for super+menu and ctrl+alt+t (needs-restarting is part of yum-utils)
+sh -c "needs restarting -r && systemctl suspend || (notify-send -u critical -t 0 'shutdown in 5 minutes...' 'to cancel run shutdown -c' && shutdown +5)" 
+
+# fyi how to check installed packages
+dnf rq --deplist nautilus
+dnf info gnome-system-monitor
 -->
 
