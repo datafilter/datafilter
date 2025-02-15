@@ -62,9 +62,11 @@ sudo systemctl enable libvirtd
 sudo systemctl enable crond 
 ```
 
-## Reboot
+## Update & Reboot
 ```
-sudo dnf --refresh upgrade && reboot
+sudo dnf autoremove
+sudo dnf --refresh upgrade
+reboot
 ```
 ---
 
