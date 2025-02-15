@@ -21,7 +21,7 @@ From the popular company backed distro's, fedora is more stable than ubuntu, esp
 > Take note, install via LAN as WiFi might not work initially (possibly NetworkManager(/-wifi) package)
 
 ```
-sudo dnf install @base-x gnome-shell firefox nautilus gnome-system-monitor gnome-disk-utility gnome-software gedit ptyxis cronie --setopt=install_weak_deps=False
+sudo dnf install @base-x gnome-shell firefox nautilus gnome-system-monitor gnome-disk-utility gnome-software gedit ptyxis --setopt=install_weak_deps=False
 ```
 <details>
 <summary>Package details</summary>
@@ -38,7 +38,6 @@ Tools
 * **gnome-disk-utility**: Disk management
 * **gedit**: Text editor, mouse & copy+paste
 * **ptyxi**: Terminal emulator
-* **cronie**: Schedule cron jobs
 
 Curiosity
 * **gnome-software**: Software management app
@@ -57,12 +56,10 @@ sudo dnf install @virtualization virt-manager
 
 ## Enable services
 
-Boot into desktop, start virtual machine manger, start cron, start auto-updates
+Boot into desktop & start virtual machine manger
 ```
 sudo systemctl set-default graphical.target
 sudo systemctl enable libvirtd 
-sudo systemctl enable crond
-sudo systemctl enable dnf5-automatic.timer
 ```
 
 ## Auto-updates
@@ -72,7 +69,7 @@ sudo systemctl enable dnf5-automatic.timer
 > Work in progress, run `man dnf5-automatic` to replace echo instead & test if config works.
 
 ```
-sudo dnf5 install dnf5-plugin-automatic
+sudo dnf install dnf5-plugin-automatic
 echo '
 [commands]
 apply_updates = yes
@@ -82,7 +79,9 @@ sudo systemctl enable dnf5-automatic.timer
 
 ### Option2: cron
 ```
-TBD - 
+TBD -
+sudo dnf install cronie
+sudo systemctl enable crond
 ```
 
 ## Update & Reboot
