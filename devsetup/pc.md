@@ -64,9 +64,9 @@ sudo systemctl enable libvirtd
 
 ## Auto-updates
 
-### Option1: dn5 automatic (WIP)
+### Option1: dnf5 automatic (WIP)
 
-> Work in progress, run `man dnf5-automatic` to replace echo instead & test if config works.
+> Work in progress (untested)
 
 ```
 sudo dnf install dnf5-plugin-automatic
