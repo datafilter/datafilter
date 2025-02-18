@@ -26,7 +26,7 @@ systemctl enable dnf5-automatic.timer
 
 # Weekly normal updates
 dnf install -y cronie
-systemctl enable --now crond
+systemctl enable crond
 (crontab -l 2>/dev/null; echo "0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting && [ \$? -eq 1 ] && reboot") | crontab 
 
 # Update and reboot
