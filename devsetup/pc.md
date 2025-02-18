@@ -64,16 +64,16 @@ sudo systemctl enable libvirtd
 
 ## Auto-updates
 
-### Option1: dnf5 automatic (WIP)
-
-> Work in progress (untested)
-
+### Option1: dnf5 automatic
 ```
 sudo dnf install dnf5-plugin-automatic
-echo '
+sudo tee /etc/dnf/automatic.conf << EOF
 [commands]
 apply_updates = yes
-' | sudo tee -a /etc/dnf/automatic.conf
+download_updates = yes
+upgrade_type = security
+reboot = when-needed
+EOF
 sudo systemctl enable dnf5-automatic.timer
 ```
 
@@ -103,10 +103,6 @@ dnf list --installed | wc -l
 ## TBD
 #############################################
 
-enable  automatic updates
-sudo sed -i 's/^apply_updates = .*/apply_updates = yes/' /etc/dnf/automatic.conf
-sudo sed -i 's/^reboot = .*/reboot = when-needed/' /etc/dnf/automatic.conf
-   
 ###install vm(s) & start vm(s) on machine startup
 ####sudo virsh autostart debian12
 
