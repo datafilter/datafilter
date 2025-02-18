@@ -116,8 +116,9 @@ dnf rq --deplist nautilus
 dnf info gnome-system-monitor
 
 # fyi how to check auto-updates happened
-sudo dnf history
+sudo dnf history list # sudo dnf history help
 sudo journalctl -u dnf5-automatic.service
+sudo journalctl -u crond
 who -b
 -->
 
