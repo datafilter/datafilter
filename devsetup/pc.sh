@@ -2,8 +2,6 @@
 
 # To install, run:
 # sudo /bin/bash -c "$(curl -fsSL https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh)"
-# or
-# curl -fsSL https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh | sudo bash
 
 # Install just enough to surf & do basics
 dnf install -y @base-x gnome-shell firefox nautilus gnome-system-monitor gnome-disk-utility gnome-software gedit ptyxis --setopt=install_weak_deps=False
@@ -29,7 +27,7 @@ systemctl enable dnf5-automatic.timer
 # Weekly normal updates
 dnf install -y cronie
 systemctl enable --now crond
-(crontab -l 2>/dev/null; echo "0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting --reboothint && [ \$? -eq 1 ] && reboot") | crontab 
+(crontab -l 2>/dev/null; echo "0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting && [ \$? -eq 1 ] && reboot") | crontab 
 
 # Update and reboot
 dnf autoremove -y
