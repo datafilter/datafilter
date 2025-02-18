@@ -64,7 +64,7 @@ sudo systemctl enable libvirtd
 
 ## Auto-updates
 
-### Option1: dnf5 automatic
+Daily security updates
 ```
 sudo dnf install dnf5-plugin-automatic
 sudo tee /etc/dnf/automatic.conf << EOF
@@ -77,12 +77,17 @@ EOF
 sudo systemctl enable dnf5-automatic.timer
 ```
 
-### Option2: cron
+Weekly normal updates
 ```
-TBD -
 sudo dnf install cronie
 sudo systemctl enable crond
 ```
+update the system every Sunday
+```
+sudo crontab -e
+0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting && [ $? -eq 1 ] && reboot
+```
+
 
 ## Update & Reboot
 ```
@@ -103,72 +108,16 @@ dnf list --installed | wc -l
 ## TBD
 #############################################
 
-###install vm(s) & start vm(s) on machine startup
-####sudo virsh autostart debian12
-
-####create frequent auto-update script 
-#### dnf [update stuff and clean stuff] && (dnf needs-restarting && (send email that restart happened) && restart)
-####crontab -e
-```
-#!/bin/bash
-
-# Log current time
-date +"%Y-%m-%d %H:%M:%S" > /etc/update-cron.log
-
-# Update the system
-echo "Updating the system..." >> /etc/update-cron.log
-dnf upgrade --refresh -y >> /etc/update-cron.log
-
-# Remove unused packages
-echo "Removing unused packages..." >> /etc/update-cron.log
-dnf autoremove -y >> /etc/update-cron.log
-
-# Check if a reboot is needed
-if dnf needs-restarting -r; then
-    echo "Rebooting the system..." >> /etc/update-cron.log
-    reboot >> /etc/update-cron.log
-else
-    echo "No reboot required." >> /etc/update-cron.log
-fi
-```
-sudo chmod +x /usr/local/bin/update-script.sh
-sudo vi /etc/systemd/system/update-script.service
-```
-[Unit]
-Description=Run update script
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/update-script.sh
-```
-sudo vi /etc/systemd/system/update-script.timer
-```
-[Unit]
-Description=Run update script daily at midnight
-
-[Timer]
-OnCalendar=*-*-* 00:00:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target
-```
-sudo systemctl enable update-script.timer
-
-## dnf changes:
-needs restarting is part of dnf5
-automatic install is only 1 timer now:
-https://dnf5.readthedocs.io/en/latest/dnf5_plugins/automatic.8.html#automatic-plugin-ref-label
-edit and enable it as per  https://dnf5.readthedocs.io/en/latest/dnf5_plugins/automatic.8.html#run-dnf5-automatic-service
-modify etc/dnf/automatic.conf --installupdates --timer and so on.
-systemctl enable --now dnf5-automatic.timer
-
-# add keyboard shortcut for super+menu and ctrl+alt+t (needs-restarting is part of yum-utils)
-sh -c "dnf needs-restarting -r && systemctl suspend || (notify-send -u critical -t 0 'shutdown in 5 minutes...' 'to cancel run shutdown -c' && shutdown +5)" 
+# install vm(s) & start vm(s) on machine startup
+sudo virsh autostart debian12
 
 # fyi how to check installed packages
 dnf rq --deplist nautilus
 dnf info gnome-system-monitor
 
+# fyi how to check auto-updates happened
+sudo dnf history
+sudo journalctl -u dnf5-automatic.service
+who -b
 -->
 
