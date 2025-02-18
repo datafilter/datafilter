@@ -13,7 +13,7 @@ systemctl set-default graphical.target
 dnf install -y @virtualization virt-manager
 systemctl enable libvirtd 
 
-# Auto security updates
+# Daily security updates
 dnf install -y dnf5-plugin-automatic
 tee /etc/dnf/automatic.conf << EOF
 [commands]
@@ -23,6 +23,11 @@ upgrade_type = security
 reboot = when-needed
 EOF
 systemctl enable dnf5-automatic.timer
+
+# Weekly normal updates
+dnf install -y cronie
+systemctl enable --now crond
+(crontab -l 2>/dev/null; echo "0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting --reboothint && [ \$? -eq 1 ] && reboot") | crontab 
 
 # Update and reboot
 dnf autoremove -y
