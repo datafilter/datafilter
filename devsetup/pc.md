@@ -64,7 +64,7 @@ sudo systemctl enable libvirtd
 
 ## Auto-updates
 
-Daily security updates
+### Daily security updates
 ```
 sudo dnf install dnf5-plugin-automatic
 sudo tee /etc/dnf/automatic.conf << EOF
@@ -77,12 +77,12 @@ EOF
 sudo systemctl enable dnf5-automatic.timer
 ```
 
-Weekly normal updates
+### Weekly normal updates
 ```
 sudo dnf install cronie
 sudo systemctl enable crond
 ```
-update the system every Sunday
+schedule update every Sunday
 ```
 sudo crontab -e
 0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting && [ $? -eq 1 ] && reboot
