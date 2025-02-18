@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # To install, run:
-# curl -s https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh | sudo sh
+# sudo /bin/bash -c "$(curl -fsSL https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh)"
+# or
+# curl -fsSL https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh | sudo bash
 
 # Install just enough to surf & do basics
 dnf install -y @base-x gnome-shell firefox nautilus gnome-system-monitor gnome-disk-utility gnome-software gedit ptyxis --setopt=install_weak_deps=False
