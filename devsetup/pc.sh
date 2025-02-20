@@ -7,7 +7,7 @@
 dnf install -y @base-x 
 
 # Window manager
-dnf install gnome-shell --setopt=install_weak_deps=False
+dnf install -y gnome-shell --setopt=install_weak_deps=False
 
 # Browser
 dnf install -y firefox
