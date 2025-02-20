@@ -3,20 +3,26 @@
 # To install, run:
 # sudo /bin/bash -c "$(curl -fsSL https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh)"
 
-# Install just enough to surf & do basics
-dnf install -y @base-x gnome-shell firefox nautilus gnome-disk-utility gedit ptyxis
+# UI
+dnf install -y @base-x 
 
-# Optional installs --setopt=install_weak_deps=False
-# dnf install -y gnome-system-monitor gnome-software
+# Window manager
+dnf install gnome-shell --setopt=install_weak_deps=False
+
+# Browser
+dnf install -y firefox
+
+# System tools
+dnf install -y nautilus gnome-disk-utility gedit ptyxis gnome-system-monitor gnome-software
 
 # Boot into desktop
 systemctl set-default graphical.target
 
 # Virtual machine support
 dnf install -y @virtualization virt-manager
-systemctl enable libvirtd 
+systemctl enable libvirtd.service
 
-# Daily security updates
+# Daily security updates & full update upon required restart
 dnf install -y dnf5-plugin-automatic
 tee /etc/dnf/automatic.conf << EOF
 [commands]
@@ -24,13 +30,13 @@ apply_updates = yes
 download_updates = yes
 upgrade_type = security
 reboot = when-needed
+reboot_command = "dnf --refresh upgrade -y && shutdown -r +5 'Required reboot for updates'"
 EOF
 systemctl enable dnf5-automatic.timer
 
-# Weekly normal updates
-dnf install -y cronie
-systemctl enable crond
-(crontab -l 2>/dev/null; echo "0 2 * * 0 dnf --refresh upgrade -y && dnf autoremove -y && dnf needs-restarting && [ \$? -eq 1 ] && reboot") | crontab 
+# Disable remote access
+systemctl stop sshd.service
+systemctl disable sshd.service
 
-# Update and reboot
+# Reboot
 reboot
