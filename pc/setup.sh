@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # To install, run:
-# sudo /bin/bash -c "$(curl -fsSL https://github.com/datafilter/datafilter/raw/main/devsetup/pc.sh)"
+# sudo /bin/bash -c "$(curl -fsSL https://github.com/datafilter/datafilter/raw/main/pc/setup.sh)"
 
 # UI
 dnf install -y @base-x 
