@@ -30,7 +30,7 @@ apply_updates = yes
 download_updates = yes
 upgrade_type = security
 reboot = when-needed
-reboot_command = "dnf --refresh upgrade -y && shutdown -r +5 'Required reboot for updates'"
+reboot_command = "dnf --refresh upgrade -y && shutdown -r +15 'Required reboot for updates'"
 EOF
 systemctl enable dnf5-automatic.timer
 
