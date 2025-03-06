@@ -10,7 +10,7 @@ dnf install -y @base-x
 dnf install -y gnome-shell --setopt=install_weak_deps=False
 
 # Browser
-dnf install -y firefox
+dnf install -y chromium
 
 # System tools
 dnf install -y nautilus gnome-disk-utility gedit ptyxis gnome-system-monitor gnome-software
