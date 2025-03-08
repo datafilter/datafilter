@@ -22,7 +22,7 @@ systemctl set-default graphical.target
 dnf install -y @virtualization virt-manager
 systemctl enable libvirtd.service
 
-# Daily security updates & full update upon required restart
+# Daily security updates & full update then shutdown when restart is required
 dnf install -y dnf5-plugin-automatic
 tee /etc/dnf/automatic.conf << EOF
 [commands]
@@ -30,7 +30,7 @@ apply_updates = yes
 download_updates = yes
 upgrade_type = security
 reboot = when-needed
-reboot_command = "dnf --refresh upgrade -y ; reboot"
+reboot_command = "dnf --refresh upgrade -y ; shutdown"
 EOF
 systemctl enable dnf5-automatic.timer
 
