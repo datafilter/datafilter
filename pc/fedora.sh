@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# To install, run:
-# sudo /bin/bash -c "$(curl -fsSL https://start.datafilter.xyz/pc/setup.sh)"
+### Download the script
+# curl -fsSL https://start.datafilter.xyz/pc/fedora.sh > fedora.sh ; chmod +x fedora.sh
+
+### review and make changes. Eg. reboot instead of shutdown, keep remote access, etc.
+# vi fedora.sh
+
+### run the script
+# sudo ./fedora.sh
 
 # UI
 dnf install -y @base-x 
 
 # Window manager
-dnf install -y gnome-shell --setopt=install_weak_deps=False
+dnf install -y gnome-shell # --setopt=install_weak_deps=False
 
 # Browser
 dnf install -y chromium
