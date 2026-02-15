@@ -1,5 +1,10 @@
 #!/bin/bash
 
+### NOTE: Install with LAN. WiFi won't work with minimal install on boot before script is run.
+
+### Download Fedora network installer image (Fedora Everything 43 x86_64)
+# https://www.fedoraproject.org/misc/#everything
+
 ### Download the script
 # curl -fsSL https://start.datafilter.xyz/pc/fedora.sh > fedora.sh ; chmod +x fedora.sh
 
@@ -27,6 +32,7 @@ systemctl set-default graphical.target
 # Virtual machine support
 dnf install -y @virtualization virt-manager
 systemctl enable libvirtd.service
+usermod -aG libvirt "$SUDO_USER"
 
 # Daily security updates & full update then shutdown when restart is required
 dnf install -y dnf5-plugin-automatic
