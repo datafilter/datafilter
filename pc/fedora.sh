@@ -24,7 +24,7 @@ dnf install -y gnome-shell # --setopt=install_weak_deps=False
 dnf install -y chromium
 
 # System tools
-dnf install -y nautilus gnome-disk-utility gedit ptyxis gnome-system-monitor gnome-software
+dnf install -y ptyxis nautilus gnome-disk-utility gnome-text-editor gnome-system-monitor gnome-software
 
 # Boot into desktop
 systemctl set-default graphical.target
