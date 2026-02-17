@@ -1,0 +1,9 @@
+[Unit]
+Description=Upgrade and Reboot
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/dnf -y upgrade
+ExecStart=/usr/bin/dnf -y autoremove
+ExecStartPost=/usr/sbin/reboot
