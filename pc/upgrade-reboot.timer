@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Upgrade and Reboot every Thursday at 3am
+
+[Timer]
+# Format: DayOfWeek Year-Month-Day Hour:Minute:Second
+OnCalendar=Thu *-*-* 03:00:00
+# Randomly within the hour
+RandomizedDelaySec=1h
+# If missed, start on next boot
+Persistent=true
+
+[Install]
+WantedBy=timers.target
