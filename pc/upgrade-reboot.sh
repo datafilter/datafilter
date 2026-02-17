@@ -11,15 +11,15 @@ TARGET_DIR="/etc/systemd/system"
 
 echo "Installing Weekly Upgrade-Reboot Service..."
 
-# 1. Download the units
+echo 1. Download the units
 for FILE in "${FILES[@]}"; do
-    curl -sL "$MY_URL/$FILE" -o "$TARGET_DIR/$FILE"
+    curl -fsSL "$MY_URL/$FILE" -o "$TARGET_DIR/$FILE"
 done
 
-# 2. Set permissions
+echo 2. Set permissions
 chmod 644 $TARGET_DIR/upgrade-reboot.*
 
-# 3. Reload systemd and enable the timer
+echo 3. Reload systemd and enable the timer
 systemctl daemon-reload
 systemctl enable --now upgrade-reboot.timer
 
