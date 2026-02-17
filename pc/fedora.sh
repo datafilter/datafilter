@@ -56,7 +56,7 @@ systemctl enable libvirtd.service
 usermod -aG libvirt "$SUDO_USER"
 
 # Weekly updates restart on Thursdays around 3am
-curl https://start.datafilter.xyz/pc/upgrade-reboot.sh | bash
+curl -sfL https://start.datafilter.xyz/pc/upgrade-reboot.sh | bash
 
 # Disable remote access
 systemctl stop sshd.service
